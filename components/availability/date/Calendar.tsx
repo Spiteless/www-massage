@@ -24,9 +24,6 @@ export default function Calendar({
     timeZone: "Etc/GMT",
   })
 
-  console.log("startDate", startDate)
-  console.log("endDate", endDate)
-
   // Handles when the date changes due to the selected timezone
   const now = Day.todayWithOffset(0)
 
@@ -52,7 +49,6 @@ export default function Calendar({
   if (lastWeek && lastWeek.toInterval(timeZone).end >= endDate) {
     days.splice(-7, 7)
   }
-  console.log("lastWeek", lastWeek)
 
   return (
     <div

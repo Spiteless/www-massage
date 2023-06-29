@@ -4,14 +4,21 @@ import type {
 } from "next"
 import bookingConfig, { bookingConfigType } from "@/bookingConfig"
 
+bookingConfig.pricing = {
+  60: 100,
+  90: 150,
+  120: 200,
+  150: 250,
+}
+
 const options: bookingConfigType = {
   ...bookingConfig
 }
 
 //type that combines PageProps and options
-export type PagePropsWithOptions = PageProps & {options: bookingConfigType}
+export type PagePropsWithOptions = PageProps & bookingConfigType
 
-function TestPage(props: PagePropsWithOptions) {
+function BookPage(props: PagePropsWithOptions) {
   return (
     <BookingFeature.Component {...props} options={options} />
   )
@@ -26,4 +33,4 @@ export async function getServerSideProps() {
   }
 }
 
-export default TestPage
+export default BookPage

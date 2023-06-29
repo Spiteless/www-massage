@@ -4,7 +4,7 @@ import { useReducer, useContext, createContext } from "react"
 import { ALLOWED_DURATIONS, DEFAULT_DURATION } from "@/config"
 import Day from "@/lib/day"
 import type { DateTimeInterval } from "@/lib/types"
-import type { PageProps } from "@/pages"
+import type { PageProps } from "@/components/features/BookingFeature"
 import type { BookingFormData } from "@/components/booking/BookingForm"
 
 type ModalStatus = "open" | "busy" | "error" | "closed"

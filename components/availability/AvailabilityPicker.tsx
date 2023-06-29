@@ -7,6 +7,7 @@ import TimezonePicker from "./controls/TimezonePicker"
 import { useProvider } from "@/context/AvailabilityContext"
 import type { DateTimeInterval } from "@/lib/types"
 import format from "date-fns-tz/format"
+import { bookingConfigType } from "@/bookingConfig"
 
 // Load these dynamically, without SSR, to avoid hydration issues
 // that arise with timezone differences.
@@ -22,14 +23,15 @@ export type PickerProps = {
   }
 }
 
-export default function AvailabilityPicker({ slots, pickerProps }: {
+export default function AvailabilityPicker({ slots, pickerProps, options }: {
   slots: DateTimeInterval[],
-  pickerProps: PickerProps
+  pickerProps: PickerProps,
+  options: bookingConfigType
 }) {
   const { durationProps } = pickerProps
   const { showPicker } = pickerProps.tzPickerProps || { showPicker: true }
   const {
-    state: { selectedDate, timeZone },
+    state: { selectedDate, timeZone, duration },
   } = useProvider()
 
   let maximumAvailability = 0
@@ -61,7 +63,7 @@ export default function AvailabilityPicker({ slots, pickerProps }: {
         <DurationPicker {...durationProps} />
         {showPicker && <TimezonePicker />}
       </div>
-      <BookingForm />
+      <BookingForm pricingStatement={`$${options.pricing[duration]} - ${duration} minutes`} />
       <Calendar
         offers={availabilityByDate}
         maximumAvailability={maximumAvailability}

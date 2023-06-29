@@ -53,7 +53,7 @@ const paymentMethod = [
   },
 ]
 
-export default function BookingForm() {
+export default function BookingForm({pricingStatement}: {pricingStatement: string}) {
   const {
     state: { modal, selectedTime, timeZone, duration, formData },
     dispatch,
@@ -114,6 +114,9 @@ export default function BookingForm() {
           <p className="text-xs md:text-sm">
             {startString} - {endString}
           </p>
+          {pricingStatement && <p className="mt-1 text-xs md:text-sm font-semibold text-secondary-800 dark:text-secondary-400">
+            {pricingStatement}
+          </p>}
         </div>
 
         <div className="flex flex-col space-y-4">

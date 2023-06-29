@@ -1,4 +1,4 @@
-import type { AvailabilitySlotsMap } from "./lib/types"
+import type { AvailabilitySlot, AvailabilitySlotsMap } from "./lib/types"
 
 export const ALLOWED_DURATIONS = [60, 90, 120, 150]
 export const DEFAULT_PRICING: {[key: number] : number} = {
@@ -15,7 +15,21 @@ export const OWNER_TIMEZONE = "America/Los_Angeles"
 export const LEAD_TIME = 3 * 60 // 3 hours
 export const DEFAULT_APPOINTMENT_INTERVAL = 30 // minutes
 
-const DEFAULT_WORKDAY = [
+export type defaultWorkdayType = {
+  // array of intervals
+  [key: number]: AvailabilitySlot[],
+}
+
+export type intervalType = {
+  start: {
+    hour: number,
+  },
+  end: {
+    hour: number,
+  },
+}
+
+export const DEFAULT_WORKDAY = [
   {
     start: {
       hour: 10,
