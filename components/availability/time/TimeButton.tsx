@@ -18,10 +18,15 @@ export default function Time({ time: { start, end }, ...props }: TimeProps) {
     <button
       type="button"
       className={clsx(
-        "rounded-md border-slate-300 border bg-white py-2 px-3 shadow-sm transition-all",
+        "rounded-md border-2 py-2 px-3 shadow-md transition-all",
+        "bg-white border-slate-300",
         "text-sm font-semibold text-gray-900",
-        "hocus:bg-secondary-50/20 hocus:shadow-sm hocus:shadow-secondary-100 hocus:-mt-0.5 hocus:mb-0.5 hocus:border-secondary-500 dark:hocus:text-gray-200",
-        "active:mt-0.5 active:-mb-0.5  outline-secondary-600"
+        "hover:bg-slate-500/30 hover:shadow-sm hover:shadow-secondary-100 hover:border-secondary-500 dark:hover:text-gray-200",
+        "hover:focus:bg-slate-500/30",
+        "focus:border-b-4 focus:-mb-0.5",
+        "outline-slate-400",
+        "focus:ring-secondary-400",
+        "focus:ring-2 focus:ring-offset-1"
       )}
       onClick={() => {
         dispatch({
