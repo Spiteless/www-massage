@@ -83,6 +83,11 @@ function Main({
         payload: Day.dayFromString(dateString), //payload from date respecting timezone
       })
     }
+
+    dispatch({
+      type: "SET_PRICING",
+      payload: options.pricing
+    })
     // Run once, on initial render.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

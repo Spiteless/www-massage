@@ -68,6 +68,8 @@ export type AppointmentProps = {
   requestId: string
   /** Name of the requester */
   name: string
+  /** Phone number of the requester */
+  phone: string
   /** Duration of the meeting in minutes  */
   duration: string
 }

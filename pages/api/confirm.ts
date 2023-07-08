@@ -1,25 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from "next"
-import { z } from "zod"
 
 import createCalendarAppointment from "@/lib/availability/createAppointment"
 import getHash from "@/lib/hash"
 
 import templates from "@/lib/messageTemplates/templates"
+import schema from "@/lib/api/appointmentSchema"
 
-const AppointmentPropsSchema = z.object({
-  name: z.string(),
-  email: z.string().email(),
-  start: z.string(),
-  end: z.string(),
-  timeZone: z.string(),
-  location: z.string(),
-  // phone: z.string(),
-  duration: z
-    .string()
-    .refine((value) => !Number.isNaN(Number.parseInt(value)), {
-      message: "Duration must be a valid integer.",
-    }),
-})
+const AppointmentPropsSchema = schema.propsSchema
 
 export default async function handler(
   req: NextApiRequest,
@@ -69,7 +56,7 @@ export default async function handler(
   const response = await createCalendarAppointment({
     ...validObject,
     requestId: hash,
-    summary: templates.eventSummary({duration: validObject.duration, clientName: validObject.name}) || "Error in createEventSummary()",
+    summary: templates.eventSummary(validObject) || "Error in createEventSummary()",
   })
 
   const details = await response.json()

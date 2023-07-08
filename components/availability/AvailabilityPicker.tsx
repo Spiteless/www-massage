@@ -63,7 +63,7 @@ export default function AvailabilityPicker({ slots, pickerProps, options }: {
         <DurationPicker {...durationProps} />
         {showPicker && <TimezonePicker />}
       </div>
-      <BookingForm pricingStatement={`$${options.pricing[duration]} - ${duration} minutes`} />
+      <BookingForm />
       <Calendar
         offers={availabilityByDate}
         maximumAvailability={maximumAvailability}

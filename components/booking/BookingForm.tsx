@@ -23,9 +23,11 @@ export type BookingFormData = {
   phone?: string,
   /** Payment method of the requester */
   paymentMethod?: string,
+  /** The cost of the appointment */
+  price?: string,
 }
 
-const paymentMethod = [
+export const paymentMethod = [
   {
     name: "Cash",
     value: "cash",
@@ -34,7 +36,7 @@ const paymentMethod = [
   {
     name: "Venmo",
     value: "venmo",
-    hint: "Venmo name is @TrilliumSmith"
+    hint: "Venmo name is @TrilliumSmith, last 4 phone is -5344"
   },
   {
     name: "CashApp",
@@ -53,12 +55,13 @@ const paymentMethod = [
   },
 ]
 
-export default function BookingForm({pricingStatement}: {pricingStatement: string}) {
+export default function BookingForm() {
   const {
-    state: { modal, selectedTime, timeZone, duration, formData },
+    state: { modal, selectedTime, timeZone, duration, formData, pricing },
     dispatch,
   } = useProvider()
   const router = useRouter()
+  const price = pricing[duration]
 
   if (!selectedTime || !timeZone) {
     return <></>
@@ -106,6 +109,8 @@ export default function BookingForm({pricingStatement}: {pricingStatement: strin
         />
         <input type="hidden" name="duration" value={duration} />
         <input type="hidden" name="timeZone" value={timeZone} />
+        <input type="hidden" name="price" value={pricing[duration]} />
+        <input type="hidden" name="honeypot" />
 
         <div className="border-l-4 border-l-secondary-400 bg-secondary-50/30 dark:bg-secondary-50/10 p-3 mt-3 mb-4 rounded-md">
           <p className="text-sm md:text-base font-semibold text-secondary-800 dark:text-secondary-400">
@@ -114,8 +119,8 @@ export default function BookingForm({pricingStatement}: {pricingStatement: strin
           <p className="text-xs md:text-sm">
             {startString} - {endString}
           </p>
-          {pricingStatement && <p className="mt-1 text-xs md:text-sm font-semibold text-secondary-800 dark:text-secondary-400">
-            {pricingStatement}
+          {price && <p className="mt-1 text-xs md:text-sm font-semibold text-secondary-800 dark:text-secondary-400">
+          {`$${price} - ${duration} minutes`}
           </p>}
         </div>
 
@@ -150,7 +155,7 @@ export default function BookingForm({pricingStatement}: {pricingStatement: strin
               <input
                 aria-label="Phone Number"
                 required
-                autoComplete="te;"
+                autoComplete="tel"
                 aria-required
                 name="phone"
                 id="phone"
@@ -217,10 +222,13 @@ export default function BookingForm({pricingStatement}: {pricingStatement: strin
                       className="ml-1.5 block text-sm leading-6 text-gray-800 dark:text-gray-100">
                       {payType.name}
                     </label>
+                    <p className="text-sm pl-4 text-gray-500 dark:text-secondary-400 block sm:hidden">
+                {(!!formData && formData.paymentMethod == payType.value) && `* ${payType.hint}`}
+              </p>
                   </div>
                 ))}
               </div>
-              <p className="text-sm pl-4 text-gray-500 dark:text-gray-300">
+              <p className="text-sm pl-4 text-gray-500 dark:text-secondary-400 hidden sm:block">
                 * {!!formData && paymentMethod.filter((p) => p.value === formData.paymentMethod)[0].hint}
               </p>
             </fieldset>

@@ -22,16 +22,9 @@ function buildDescription(location: string) {
 }
 
 // Helper function to build the event body
-function buildEventBody({
-  start,
-  end,
-  summary,
-  email,
-  location,
-  requestId,
-  name,
-}: AppointmentProps) {
-  const description = templates.eventDescription({start, end, summary, email, location, name})
+function buildEventBody(props: AppointmentProps) {
+  const {start, end, name, email, location, summary} = props
+  const description = templates.eventDescription(props)
 
   return {
     start: {

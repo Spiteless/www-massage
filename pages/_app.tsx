@@ -1,5 +1,6 @@
 import type { AppProps } from "next/app"
 import { Public_Sans } from "next/font/google"
+import { Analytics } from '@vercel/analytics/react';
 import Head from "next/head"
 
 import { ThemeProvider } from 'next-themes'
@@ -20,9 +21,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <>
       <ThemeProvider attribute="class" defaultTheme={theme}>
         <Head>
-          <title>{`Meet with ${
-            process.env.NEXT_PUBLIC_OWNER_NAME ?? "me"
-          }`}</title>
+          <title>{`Trillium Massage`}</title>
           <link
             rel="icon"
             type="image/png"
@@ -46,6 +45,7 @@ export default function App({ Component, pageProps }: AppProps) {
         </nav>
         <Component {...pageProps} />
       </ThemeProvider>
+      <Analytics />
     </>
   )
 }

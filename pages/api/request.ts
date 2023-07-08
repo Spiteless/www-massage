@@ -1,6 +1,5 @@
 import LRUCache from "lru-cache"
 import type { NextApiRequest, NextApiResponse } from "next"
-import { z } from "zod"
 
 import { OWNER_TIMEZONE } from "@/config"
 import { formatLocalDate, formatLocalTime } from "@/lib/availability/helpers"
@@ -9,6 +8,7 @@ import ApprovalEmail from "@/lib/email/messages/Approval"
 import ConfirmationEmail from "@/lib/email/messages/Confirmation"
 import getHash from "@/lib/hash"
 import type { DateTimeIntervalWithTimezone } from "@/lib/types"
+import schema from "@/lib/api/appointmentSchema"
 
 // Define the rate limiter
 const rateLimitLRU = new LRUCache({
@@ -18,23 +18,7 @@ const rateLimitLRU = new LRUCache({
 const REQUESTS_PER_IP_PER_MINUTE_LIMIT = 5
 
 // Define the schema for the request body
-const AppointmentRequestSchema = z.object({
-  name: z.string(),
-  email: z.string().email(),
-  start: z.string().refine((value) => !Number.isNaN(Date.parse(value)), {
-    message: "Start must be a valid date.",
-  }),
-  end: z.string().refine((value) => !Number.isNaN(Date.parse(value)), {
-    message: "End must be a valid date.",
-  }),
-  timeZone: z.string(),
-  location: z.string(),
-  duration: z
-    .string()
-    .refine((value) => !Number.isNaN(Number.parseInt(value)), {
-      message: "Duration must be a valid integer.",
-    }),
-})
+const AppointmentRequestSchema = schema.requestSchema
 
 export default async function handler(
   req: NextApiRequest,
@@ -90,6 +74,7 @@ export default async function handler(
 
   // Generate and send the confirmation email
   const confirmationEmail = ConfirmationEmail({
+    ...data,
     dateSummary: intervalToHumanString({
       start,
       end,

@@ -1,7 +1,8 @@
 import type { Dispatch, FC } from "react"
 import { useReducer, useContext, createContext } from "react"
 
-import { ALLOWED_DURATIONS, DEFAULT_DURATION } from "@/config"
+import { ALLOWED_DURATIONS, DEFAULT_DURATION, DEFAULT_PRICING } from "@/config"
+
 import Day from "@/lib/day"
 import type { DateTimeInterval } from "@/lib/types"
 import type { PageProps } from "@/components/features/BookingFeature"
@@ -23,6 +24,10 @@ export type StateType = {
    */
   duration: number
   /** Whether the booking modal is open or busy. */
+  pricing: {
+    [key: number]: number
+  }
+  /** The session price. */
   modal: ModalStatus
   /** The time slot the user selected (if made). */
   selectedTime?: DateTimeInterval
@@ -45,6 +50,11 @@ export type ActionType =
       type: "SET_DURATION"
       /** Change the duration */
       payload: number
+    }
+  | {
+      type: "SET_PRICING"
+      /** Change the pricing */
+      payload: {[key: number]: number}
     }
   | {
       type: "SET_MODAL"
@@ -71,6 +81,7 @@ const StateContext = createContext<StateType>({
   end: Day.todayWithOffset(14),
   timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
   modal: "closed",
+  pricing: DEFAULT_PRICING,
   formData: {
     name: "",
     email: "",
@@ -163,6 +174,7 @@ function getInitialState(values: Omit<PageProps, "busy">): StateType {
       values.duration && !Number.isNaN(values.duration)
         ? values.duration
         : DEFAULT_DURATION,
+    pricing: DEFAULT_PRICING,
     modal: "closed",
     formData: {
       name: "",
@@ -212,6 +224,10 @@ function reducerFunction(state: StateType, action: ActionType): StateType {
     }
     case "SET_DURATION": {
       newState = { ...state, duration: action.payload }
+      break
+    }
+    case "SET_PRICING": {
+      newState = { ...state, pricing: action.payload }
       break
     }
     case "SET_MODAL": {
